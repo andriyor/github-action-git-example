@@ -21,7 +21,7 @@ jobs:
         run: npm test
       - name: commit report
         run: |
-          apt install -y jq
+          jq '.total[].pct' < ./coverage/coverage-summary.json | awk '{s+=$1} END {print (s/4)}' > report.txt 
           git config --global user.name 'Your Name'
           git config --global user.email 'andriyorehov@gmail.com'
           git add .
