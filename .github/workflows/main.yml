@@ -12,10 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Create report file
-        run: date +%s > report.txt
-      - name: Commit report
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+      - name: Install modules
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - name: commit report
         run: |
+          apt install -y jq
           git config --global user.name 'Your Name'
           git config --global user.email 'andriyorehov@gmail.com'
           git add .
