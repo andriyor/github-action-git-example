@@ -19,9 +19,13 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm test
+      - name: update report file
+        run: |
+          coverage=$(jq '.total[].pct' < ./coverage/coverage-summary.json | awk '{s+=$1} END {print (s/4)}')
+          tmp=$(mktemp)
+          jq ".testCoverage = ${coverage}" report.json > "$tmp" && mv "$tmp" report.json
       - name: commit report
         run: |
-          jq '.total[].pct' < ./coverage/coverage-summary.json | awk '{s+=$1} END {print (s/4)}' > report.txt 
           git config --global user.name 'Your Name'
           git config --global user.email 'andriyorehov@gmail.com'
           git add .
